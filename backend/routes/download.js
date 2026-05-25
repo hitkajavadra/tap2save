@@ -4,6 +4,7 @@ const { spawn } = require("child_process");
 const fs = require("fs");
 const path = require("path");
 const ffmpegPath = require("ffmpeg-static");
+const ytDlpPath = path.join(__dirname, "..", "yt-dlp");
 const { getVideoInfo, getDownloadUrl } = require("../utils/ytDlpHelper");
 const { getCookiesArgs } = require("../utils/configHelper");
 
@@ -89,7 +90,7 @@ router.get("/download", (req, res) => {
     res.setHeader("Content-Disposition", `attachment; filename="${downloadName}"`);
     res.setHeader("Content-Type", "audio/mpeg");
     res.setHeader("Transfer-Encoding", "chunked");
-    const ytDlp = spawn("yt-dlp", args);
+    const ytDlp = spawn(ytDlpPath, args);
     ytDlp.stdout.pipe(res);
     ytDlp.stderr.on("data", (data) => {
       const out = data.toString();
@@ -115,7 +116,7 @@ router.get("/download", (req, res) => {
 
   const args = [...baseArgs, "--ffmpeg-location", ffmpegPath, "-f", `${safeFormatId}+bestaudio/best`, "--merge-output-format", "mp4", "-o", tempFilePath, url];
   
-  const ytDlp = spawn("yt-dlp", args);
+  const ytDlp = spawn(ytDlpPath, args);
 
   ytDlp.stderr.on("data", (data) => {
     emitProgress(data.toString());
