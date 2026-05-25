@@ -140,8 +140,8 @@ router.get("/download", (req, res) => {
         }
       });
     } else {
-      console.error("[download] yt-dlp failed to create merged video.");
-      if (!res.headersSent) res.status(500).send("Error generating video with audio.");
+      console.error(`[download] yt-dlp failed to create merged video. Exit code: ${code}, File exists: ${fs.existsSync(tempFilePath)}`);
+      if (!res.headersSent) res.status(500).send(`Error generating video with audio. Code: ${code}`);
     }
   });
 
