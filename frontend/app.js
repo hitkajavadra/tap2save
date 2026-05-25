@@ -3,7 +3,7 @@
 // ============================================================
 // Configuration
 const isLocal = window.location.protocol === 'file:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-const API_BASE = isLocal ? "http://localhost:5000/api" : "/api";
+const API_BASE = isLocal ? "http://localhost:5000/api" : "https://tap2save.onrender.com/api";
 
 function getProxyImageUrl(url) {
   if (!url) return "";
