@@ -2,6 +2,8 @@ const { exec } = require("child_process");
 const { promisify } = require("util");
 const execAsync = promisify(exec);
 const { getCookiesArgs } = require("./configHelper");
+const path = require("path");
+const ytDlpPath = path.join(__dirname, "..", "yt-dlp");
 
 // Supported platform domains
 const SUPPORTED_DOMAINS = [
@@ -77,7 +79,7 @@ async function getVideoInfo(url) {
   // yt-dlp -j returns JSON metadata without downloading
   const cookieArgs = getCookiesArgs().join(" ");
   // Support playlists, limit to 20 items
-  const cmd = `yt-dlp -j --no-warnings --playlist-end 20 ${cookieArgs} "${url}"`;
+  const cmd = `"${ytDlpPath}" -j --no-warnings --playlist-end 20 ${cookieArgs} "${url}"`;
 
   try {
     const { stdout, stderr } = await execAsync(cmd, { timeout: 45000 });
@@ -156,7 +158,7 @@ async function getDownloadUrl(url, formatId) {
 
   const safeFormatId = formatId.replace(/[^a-zA-Z0-9_+\-]/g, "");
   const cookieArgs = getCookiesArgs().join(" ");
-  const cmd = `yt-dlp -f "${safeFormatId}+bestaudio/best" --get-url --no-warnings ${cookieArgs} "${url}"`;
+  const cmd = `"${ytDlpPath}" -f "${safeFormatId}+bestaudio/best" --get-url --no-warnings ${cookieArgs} "${url}"`;
 
   try {
     const { stdout } = await execAsync(cmd, { timeout: 30000 });
