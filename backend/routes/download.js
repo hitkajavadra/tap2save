@@ -111,10 +111,11 @@ router.get("/download", (req, res) => {
 
   // FOR VIDEO: yt-dlp CANNOT merge audio and video if streaming to stdout (-o -).
   // So we MUST download to a temp file, wait for it to merge, and then send the file.
-  const tempFileName = `temp_${Date.now()}_id_${safeFormatId}.mp4`;
+  const uniqueId = `${Date.now()}_id_${safeFormatId}`;
+  const tempFileName = `temp_${uniqueId}.mp4`;
   const tempFilePath = path.join(TMP_DIR, tempFileName);
 
-  const args = [...baseArgs, "--ffmpeg-location", ffmpegPath, "-f", `${safeFormatId}+bestaudio/best`, "--merge-output-format", "mp4", "-o", tempFilePath, url];
+  const args = [...baseArgs, "--ffmpeg-location", ffmpegPath, "-f", `${safeFormatId}+bestaudio/best`, "--merge-output-format", "mp4", "-o", path.join(TMP_DIR, `temp_${uniqueId}.%(ext)s`), url];
   
   const ytDlp = spawn(ytDlpPath, args);
 
@@ -128,19 +129,32 @@ router.get("/download", (req, res) => {
   });
 
   ytDlp.on("close", (code) => {
-    if (code === 0 && fs.existsSync(tempFilePath)) {
+    // Find the actual file created by yt-dlp
+    let actualFile = null;
+    if (fs.existsSync(TMP_DIR)) {
+      const files = fs.readdirSync(TMP_DIR);
+      actualFile = files.find(f => f.startsWith(`temp_${uniqueId}.`));
+    }
+
+    if (code === 0 && actualFile) {
+      const actualFilePath = path.join(TMP_DIR, actualFile);
       if (downloadId && progressClients[downloadId]) {
         progressClients[downloadId].write(`data: ${JSON.stringify({ done: true })}\n\n`);
       }
-      console.log(`[download] Merge complete. Sending ${downloadName} to client.`);
-      res.download(tempFilePath, downloadName, (err) => {
+      
+      // Update download name extension if yt-dlp changed it
+      const ext = path.extname(actualFile);
+      const finalDownloadName = downloadName.replace(/\.[^/.]+$/, "") + ext;
+
+      console.log(`[download] Merge complete. Sending ${finalDownloadName} to client.`);
+      res.download(actualFilePath, finalDownloadName, (err) => {
         // Cleanup temp file after sending
-        if (fs.existsSync(tempFilePath)) {
-          try { fs.unlinkSync(tempFilePath); } catch (e) { console.error("Cleanup error:", e); }
+        if (fs.existsSync(actualFilePath)) {
+          try { fs.unlinkSync(actualFilePath); } catch (e) { console.error("Cleanup error:", e); }
         }
       });
     } else {
-      console.error(`[download] yt-dlp failed to create merged video. Exit code: ${code}, File exists: ${fs.existsSync(tempFilePath)}`);
+      console.error(`[download] yt-dlp failed to create merged video. Exit code: ${code}, File exists: ${!!actualFile}`);
       if (!res.headersSent) res.status(500).send(`Error generating video with audio. Code: ${code}`);
     }
   });
