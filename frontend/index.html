@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Tap2save is the fastest, free video downloader for YouTube, Instagram, Facebook, TikTok, and Twitter. Download 4K videos and MP3 audio instantly." />
+  <meta name="keywords" content="video downloader, youtube downloader, instagram reels downloader, facebook video download, tiktok downloader, mp3 converter, 4k video download" />
+  <meta name="author" content="Tap2save" />
+  
+  <!-- Open Graph / Social Sharing Tags -->
+  <meta property="og:title" content="Tap2save - The Ultimate Video Downloader" />
+  <meta property="og:description" content="Download videos from YouTube, Instagram, Facebook, TikTok & more in HD and 4K for free!" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://Tap2save.app" />
+  <meta property="og:image" content="https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=1200&auto=format&fit=crop" />
+  <meta property="og:site_name" content="Tap2save" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Tap2save - Fast Video Downloader" />
+  <meta name="twitter:description" content="Download YouTube, Insta Reels, TikTok videos instantly." />
+
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#00f2ea" />
+  
+  <title>Tap2save - Fast & Free Video Downloader</title>
+  <link rel="stylesheet" href="style.css?v=2" />
+</head>
+<body>
+
+<!-- Animated background orbs -->
+<div class="bg-orbs" aria-hidden="true">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
+
+<!-- ===== HEADER ===== -->
+<header>
+  <div class="container">
+    <div class="header-inner">
+      <a href="/" class="logo" aria-label="Tap2save Home">
+        <div class="logo-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div>
+        <span class="logo-text">Tap2save</span>
+      </a>
+      <div class="header-right">
+        <div class="header-stats" id="headerStats" title="Total downloads this session">
+          <span class="stats-icon">⬇️</span>
+          <span id="dlCountBadge">0</span> downloads
+        </div>
+        <select id="languageSelect" class="header-lang-select" title="Select Language">
+          <option value="en">EN</option>
+          <option value="hi">HI</option>
+        </select>
+        <button class="header-settings-btn" id="themeToggleBtn" aria-label="Toggle Theme" title="Toggle Theme">🌙</button>
+        <button class="header-settings-btn" id="settingsBtn" aria-label="Settings" title="Settings">⚙️</button>
+        <div class="header-badge" id="headerBadge">✦ Free Forever</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ===== HERO ===== -->
+<main>
+  <section class="hero">
+    <div class="container">
+      <div class="hero-eyebrow">
+        <span>⚡</span> Powered by yt-dlp Engine
+      </div>
+      <h1 class="hero-title">
+        Download Videos from<br />
+        <span class="gradient-word" id="platformLabel">Any Platform</span>
+      </h1>
+      <p class="hero-sub" id="heroSub">
+        Paste any link from YouTube, Instagram, TikTok, Facebook, Snapchat, or Twitter — get your video in HD quality in seconds.
+      </p>
+
+      <!-- ===== PLATFORM TOOLBAR ===== -->
+      <div class="platform-toolbar" role="tablist" aria-label="Select platform">
+
+        <!-- YouTube -->
+        <button class="platform-btn" data-id="youtube" role="tab" aria-label="YouTube" id="btn-youtube">
+          <span class="platform-icon">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="28" height="28" rx="7" fill="#FF0000"/>
+              <path d="M22.5 9.7C22.3 8.9 21.7 8.3 20.9 8.1C19.5 7.7 14 7.7 14 7.7C14 7.7 8.5 7.7 7.1 8.1C6.3 8.3 5.7 8.9 5.5 9.7C5.1 11.1 5.1 14 5.1 14C5.1 14 5.1 16.9 5.5 18.3C5.7 19.1 6.3 19.7 7.1 19.9C8.5 20.3 14 20.3 14 20.3C14 20.3 19.5 20.3 20.9 19.9C21.7 19.7 22.3 19.1 22.5 18.3C22.9 16.9 22.9 14 22.9 14C22.9 14 22.9 11.1 22.5 9.7Z" fill="white"/>
+              <path d="M12 17L17.2 14L12 11V17Z" fill="#FF0000"/>
+            </svg>
+          </span>
+          <span class="platform-name">YouTube</span>
+        </button>
+
+        <!-- Instagram -->
+        <button class="platform-btn" data-id="instagram" role="tab" aria-label="Instagram" id="btn-instagram">
+          <span class="platform-icon">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <radialGradient id="ig-grad1" cx="30%" cy="107%" r="150%">
+                  <stop offset="0%" stop-color="#fdf497"/>
+                  <stop offset="5%" stop-color="#fdf497"/>
+                  <stop offset="45%" stop-color="#fd5949"/>
+                  <stop offset="60%" stop-color="#d6249f"/>
+                  <stop offset="90%" stop-color="#285AEB"/>
+                </radialGradient>
+              </defs>
+              <rect width="28" height="28" rx="7" fill="url(#ig-grad1)"/>
+              <rect x="7" y="7" width="14" height="14" rx="4" stroke="white" stroke-width="1.8" fill="none"/>
+              <circle cx="14" cy="14" r="3.5" stroke="white" stroke-width="1.8" fill="none"/>
+              <circle cx="19" cy="9" r="1.1" fill="white"/>
+            </svg>
+          </span>
+          <span class="platform-name">Instagram</span>
+        </button>
+
+        <!-- TikTok -->
+        <button class="platform-btn" data-id="tiktok" role="tab" aria-label="TikTok" id="btn-tiktok">
+          <span class="platform-icon">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="28" height="28" rx="7" fill="#010101"/>
+              <path d="M19.5 7C19.5 7 19.8 9.8 22.5 10.5V13.3C22.5 13.3 20.5 13.2 19 12.1V18C19 20.8 16.8 23 14 23C11.2 23 9 20.8 9 18C9 15.2 11.2 13 14 13C14.3 13 14.5 13 14.8 13.1V16C14.5 15.9 14.3 15.9 14 15.9C12.8 15.9 11.9 16.9 11.9 18C11.9 19.2 12.8 20.1 14 20.1C15.2 20.1 16.1 19.2 16.1 18V5H19.5V7Z" fill="white"/>
+              <path d="M19.5 7C19.5 7 19.8 9.8 22.5 10.5" stroke="#69C9D0" stroke-width="0.8" fill="none"/>
+              <path d="M14.8 13.1V16C14.5 15.9 14.3 15.9 14 15.9" stroke="#EE1D52" stroke-width="0.8" fill="none"/>
+            </svg>
+          </span>
+          <span class="platform-name">TikTok</span>
+        </button>
+
+        <!-- Facebook -->
+        <button class="platform-btn" data-id="facebook" role="tab" aria-label="Facebook" id="btn-facebook">
+          <span class="platform-icon">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="28" height="28" rx="7" fill="#1877F2"/>
+              <path d="M15.6 22V15.2H17.8L18.1 12.6H15.6V11C15.6 10.2 15.8 9.7 16.9 9.7H18.2V7.3C17.5 7.2 16.8 7.2 16.1 7.2C14.1 7.2 12.7 8.4 12.7 10.7V12.6H10.5V15.2H12.7V22H15.6Z" fill="white"/>
+            </svg>
+          </span>
+          <span class="platform-name">Facebook</span>
+        </button>
+
+        <!-- Twitter/X -->
+        <button class="platform-btn" data-id="twitter" role="tab" aria-label="Twitter/X" id="btn-twitter">
+          <span class="platform-icon">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="28" height="28" rx="7" fill="#000000"/>
+              <path d="M6 6.5L12.5 15.2L6 22H7.5L13.2 16.1L17.8 22H22.5L15.7 12.8L21.8 6.5H20.3L15 11.9L10.7 6.5H6ZM8.2 7.6H10.2L20.3 20.9H18.3L8.2 7.6Z" fill="white"/>
+            </svg>
+          </span>
+          <span class="platform-name">Twitter/X</span>
+        </button>
+
+        <!-- Snapchat -->
+        <button class="platform-btn" data-id="snapchat" role="tab" aria-label="Snapchat" id="btn-snapchat">
+          <span class="platform-icon">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <radialGradient id="snap-3d" cx="75%" cy="25%" r="75%">
+                  <stop offset="0%" stop-color="#ffffff"/>
+                  <stop offset="10%" stop-color="#fffa55"/>
+                  <stop offset="50%" stop-color="#ffe600"/>
+                  <stop offset="100%" stop-color="#dca500"/>
+                </radialGradient>
+              </defs>
+              <circle cx="14" cy="14" r="14" fill="url(#snap-3d)"/>
+              <svg x="4" y="4" width="20" height="20" viewBox="-1.5 -1.5 27 27">
+                <path fill="#fdfae8" stroke="#4a3e00" stroke-width="1.2" stroke-linejoin="round" d="M12.206.793c.99 0 4.347.276 5.93 3.821.529 1.193.403 3.219.299 4.847l-.003.06c-.012.18-.022.345-.03.51.075.045.203.09.401.09.3-.016.659-.12 1.033-.301.165-.088.344-.104.464-.104.182 0 .359.029.509.09.45.149.734.479.734.838.015.449-.39.839-1.213 1.168-.089.029-.209.075-.344.119-.45.135-1.139.36-1.333.81-.09.224-.061.524.12.868l.015.015c.06.136 1.526 3.475 4.791 4.014.255.044.435.27.42.509 0 .075-.015.149-.045.225-.24.569-1.273.988-3.146 1.271-.059.091-.12.375-.164.57-.029.179-.074.36-.134.553-.076.271-.27.405-.555.405h-.03c-.135 0-.313-.031-.538-.074-.36-.075-.765-.135-1.273-.135-.3 0-.599.015-.913.074-.6.104-1.123.464-1.723.884-.853.599-1.826 1.288-3.294 1.288-.06 0-.119-.015-.18-.015h-.149c-1.468 0-2.427-.675-3.279-1.288-.599-.42-1.107-.779-1.707-.884-.314-.045-.629-.074-.928-.074-.54 0-.958.089-1.272.149-.211.043-.391.074-.54.074-.374 0-.523-.224-.583-.42-.061-.192-.09-.389-.135-.567-.046-.181-.105-.494-.166-.57-1.918-.222-2.95-.642-3.189-1.226-.031-.063-.052-.15-.055-.225-.015-.243.165-.465.42-.509 3.264-.54 4.73-3.879 4.791-4.02l.016-.029c.18-.345.224-.645.119-.869-.195-.434-.884-.658-1.332-.809-.121-.029-.24-.074-.346-.119-1.107-.435-1.257-.93-1.197-1.273.09-.479.674-.793 1.168-.793.146 0 .27.029.383.074.42.194.789.3 1.104.3.234 0 .384-.06.465-.105l-.046-.569c-.098-1.626-.225-3.651.307-4.837C7.392 1.077 10.739.807 11.727.807l.419-.015h.06z"/>
+              </svg>
+            </svg>
+          </span>
+          <span class="platform-name">Snapchat</span>
+        </button>
+
+      </div>
+
+      <!-- ===== CONTENT TYPE ROW ===== -->
+      <div class="content-type-row hidden" id="contentTypeRow" role="group" aria-label="Content type">
+        <!-- Injected by JS -->
+      </div>
+
+      <!-- SEARCH CARD -->
+      <div class="search-card">
+        <div class="input-group">
+          <div class="url-input-wrap">
+            <input
+              type="url"
+              id="urlInput"
+              class="url-input"
+              placeholder="Paste video URL here... (e.g. https://youtube.com/watch?v=...)"
+              aria-label="Video URL"
+              autocomplete="off"
+              spellcheck="false"
+            />
+            <span class="url-input-icon" aria-hidden="true">🔗</span>
+            <button class="url-clear-btn" id="urlClearBtn" aria-label="Clear URL" title="Clear">✕</button>
+          </div>
+          <button id="pasteGoBtn" class="btn-paste" aria-label="Paste from clipboard and fetch">
+            <span>📋</span> Paste & Go
+          </button>
+          <button id="fetchBtn" class="btn-primary" aria-label="Fetch video info">
+            <span id="btnIcon">⬇️</span>
+            <span id="btnText">Get Video</span>
+          </button>
+        </div>
+        <p class="paste-hint">💡 Tip: Press <kbd>Ctrl</kbd><kbd>Enter</kbd> to fetch · <kbd>Ctrl</kbd><kbd>V</kbd> auto-pastes URL</p>
+      </div>
+
+      <!-- ERROR BOX -->
+      <div class="error-box" id="errorBox" role="alert" aria-live="polite">
+        <span class="error-icon">⚠️</span>
+        <span id="errorMsg">An error occurred.</span>
+      </div>
+
+      <!-- LOADER -->
+      <div class="loader-wrap" id="loader" aria-live="polite" aria-label="Loading video info">
+        <div class="spinner"></div>
+        <p class="loader-text">Fetching video info<span class="loader-dots"></span></p>
+      </div>
+
+      <!-- RESULT CARD -->
+      <div class="result-card" id="resultCard">
+        <!-- Video Info Header -->
+        <div class="result-header">
+          <div class="thumbnail-container">
+            <div class="thumbnail-wrap" id="thumbnailWrap">
+              <img id="thumbnail" src="" alt="Video thumbnail" referrerpolicy="no-referrer" onerror="this.onerror=null; this.src='https://placehold.co/600x400/1a1a2e/ffffff?text=Preview+Not+Available';" />
+              <div class="thumb-overlay">▶</div>
+            </div>
+            <button class="dl-thumb-btn" id="dlThumbBtn">🖼️ Download Thumbnail</button>
+          </div>
+          <div class="video-meta">
+            <div class="video-meta-top">
+              <div class="video-platform-badge" id="platformBadge">YouTube</div>
+              <div class="action-buttons-group">
+                <button class="copy-url-btn" id="shareBtn" title="Share video" aria-label="Share video">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                  Share
+                </button>
+                <button class="copy-url-btn" id="copyUrlBtn" title="Copy video URL" aria-label="Copy video URL">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  Copy Link
+                </button>
+              </div>
+            </div>
+            <h2 class="video-title" id="videoTitle">Video Title</h2>
+            <div class="video-stats">
+              <span class="stat-item" id="durationStat">⏱ --:--</span>
+              <span class="stat-item" id="uploaderStat">👤 Unknown</span>
+              <span class="stat-item" id="viewsStat">👁 --</span>
+            </div>
+            
+            <div class="video-trimmer" id="videoTrimmer">
+              <div class="trimmer-label">✂️ Trim Video (Optional):</div>
+              <div class="trimmer-inputs">
+                <input type="text" id="trimStart" placeholder="Start (e.g. 00:30)" aria-label="Start time" />
+                <span>to</span>
+                <input type="text" id="trimEnd" placeholder="End (e.g. 01:15)" aria-label="End time" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Video Formats -->
+        <div class="formats-section">
+          <p class="formats-title">🎞 Available Formats — Click to Choose Quality</p>
+          <div class="formats-grid" id="formatsGrid">
+            <!-- Format buttons injected here -->
+          </div>
+        </div>
+
+        <!-- MP3 Audio -->
+        <div class="mp3-section">
+          <div class="mp3-info">🎵 Extract audio only (MP3 format)</div>
+          <button class="btn-mp3" id="mp3Btn" aria-label="Download as MP3">
+            ⬇️ Download MP3
+          </button>
+        </div>
+      </div>
+
+      <!-- ===== DOWNLOAD HISTORY ===== -->
+      <div class="history-panel" id="historyPanel">
+        <div class="history-header">
+          <span class="history-title">📥 Download History</span>
+          <div class="history-actions">
+            <span class="history-count" id="historyCount">0 items</span>
+            <button class="history-clear-btn" id="historyClearBtn" aria-label="Clear history">Clear All</button>
+          </div>
+        </div>
+        <div class="history-list" id="historyList">
+          <p class="history-empty">No downloads yet. Start downloading videos!</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== FEATURES ===== -->
+  <section class="features">
+    <div class="container">
+      <h2 class="section-title">Why Choose Tap2save?</h2>
+      <p class="section-sub">Everything you need, nothing you don't.</p>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <div class="feature-name">Lightning Fast</div>
+          <div class="feature-desc">Direct extraction from platform CDNs. No re-encoding, maximum speed.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🎯</div>
+          <div class="feature-name">HD Quality</div>
+          <div class="feature-desc">Choose from 144p to 4K. Always get the best available quality.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📱</div>
+          <div class="feature-name">Mobile Friendly</div>
+          <div class="feature-desc">Works perfectly on every screen size — phones, tablets, desktops.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔒</div>
+          <div class="feature-name">Secure &amp; Private</div>
+          <div class="feature-desc">No login required. URLs are never stored. Your privacy is protected.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🎵</div>
+          <div class="feature-name">MP3 Extraction</div>
+          <div class="feature-desc">Extract high quality audio from any video with one click.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🌐</div>
+          <div class="feature-name">6+ Platforms</div>
+          <div class="feature-desc">YouTube, Instagram, TikTok, Facebook, Snapchat, Twitter/X — all in one place.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== HOW IT WORKS ===== -->
+  <section class="how-it-works">
+    <div class="container">
+      <h2 class="section-title">How It Works</h2>
+      <p class="section-sub">Three simple steps to download any video.</p>
+      <div class="steps">
+        <div class="step-item">
+          <div class="step-num" aria-hidden="true">1</div>
+          <div class="step-content">
+            <div class="step-label">Select Platform & Content Type</div>
+            <div class="step-desc">Choose your platform (YouTube, Instagram, TikTok etc.) and content type (Reel, Video, Story...) from the toolbar above.</div>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num" aria-hidden="true">2</div>
+          <div class="step-content">
+            <div class="step-label">Paste the Video URL</div>
+            <div class="step-desc">Copy the link and paste it in the box. Click "Get Video" to fetch all available formats.</div>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num" aria-hidden="true">3</div>
+          <div class="step-content">
+            <div class="step-label">Choose Quality & Download</div>
+            <div class="step-desc">Pick your preferred quality from the popup — 4K, 1080p, 720p, or MP3 audio only. Download starts instantly.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  </main>
+
+  <!-- ===== FAQ SECTION (SEO) ===== -->
+  <section class="faq-section">
+    <div class="container">
+      <h2 class="section-title">Frequently Asked Questions</h2>
+      <p class="section-sub">Everything you need to know about Tap2save</p>
+      <div class="faq-list">
+        <div class="faq-item">
+          <div class="faq-q">
+            <span>Is this video downloader really free?</span>
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-a"><p>Yes! Tap2save is 100% free to use. There are no hidden fees, subscriptions, or limits on how many videos you can download.</p></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">
+            <span>Can I download Instagram Reels and Facebook private videos?</span>
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-a"><p>Absolutely. Using our advanced 'Settings' feature, you can add your browser cookies to download private videos and reels securely.</p></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">
+            <span>Do you support 4K video downloads?</span>
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-a"><p>Yes, if the original video is available in 4K, we will provide you the option to download it in full Ultra-HD quality.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="logo">
+        <div class="logo-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div>
+        <span class="logo-text">Tap2save</span>
+      </div>
+      <nav class="footer-links" aria-label="Footer navigation">
+        <a href="#privacy">Privacy Policy</a>
+        <a href="#terms">Terms of Service</a>
+        <a href="#dmca">DMCA</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <p class="footer-legal">
+        ⚠️ This tool is for personal use only. Downloading copyrighted content without permission may violate platform Terms of Service and local copyright laws. Please respect content creators' rights.
+      </p>
+      <p class="footer-copy">© 2026 Tap2save. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<!-- Toast Notification -->
+<div class="toast" id="toast" role="status" aria-live="polite">
+  <span id="toastIcon">✅</span>
+  <span id="toastMsg">Done!</span>
+</div>
+
+<!-- Downloading Overlay -->
+<div class="downloading-overlay" id="dlOverlay" aria-live="polite">
+  <div class="dl-spinner"></div>
+  <span id="dlStatusText">Preparing your download<span class="loader-dots"></span></span>
+  <div class="progress-container">
+    <div class="progress-fill" id="dlProgressBar"></div>
+  </div>
+  <span class="progress-text" id="dlProgressText">0%</span>
+</div>
+
+<!-- ===== QUALITY MODAL ===== -->
+<div class="modal-overlay" id="qualityModal" role="dialog" aria-modal="true" aria-label="Choose download quality">
+  <div class="quality-modal">
+    <div class="modal-header">
+      <span class="modal-title">Choose Quality</span>
+      <button class="modal-close" id="modalClose" aria-label="Close modal">✕</button>
+    </div>
+
+    <!-- Mini video preview -->
+    <div class="modal-video-info">
+      <img class="modal-thumb" id="modalThumb" src="" alt="Video thumbnail" referrerpolicy="no-referrer" onerror="this.onerror=null; this.src='https://placehold.co/600x400/1a1a2e/ffffff?text=Preview+Not+Available';" />
+      <span class="modal-video-title" id="modalVideoTitle">Video Title</span>
+    </div>
+
+    <!-- Video quality options -->
+    <div class="modal-section-label">🎬 Video Quality</div>
+    <div class="quality-options-grid" id="qualityOptionsGrid">
+      <!-- Injected by JS -->
+    </div>
+
+    <!-- MP3 option -->
+    <button class="modal-mp3-btn" id="modalMp3Btn" aria-label="Download as MP3">
+      🎵 Download Audio Only (MP3)
+    </button>
+  </div>
+</div>
+
+<!-- ===== SETTINGS MODAL ===== -->
+<div class="modal-overlay" id="settingsModal" role="dialog" aria-modal="true" aria-labelledby="settingsModalTitle">
+  <div class="modal-content settings-modal-content">
+    <button class="modal-close" id="settingsClose" aria-label="Close settings modal">✕</button>
+    <h3 class="modal-title" id="settingsModalTitle">⚙️ App Settings</h3>
+    
+    <div class="settings-section">
+      <label for="cookiesInput" class="settings-label">
+        Authentication Cookies (Netscape format)
+        <span class="settings-hint">Required for Instagram, Facebook, and Snapchat private videos. Export cookies.txt from your browser using an extension.</span>
+      </label>
+      <textarea id="cookiesInput" class="settings-textarea" placeholder="# Netscape HTTP Cookie File..."></textarea>
+    </div>
+
+    <div class="settings-actions">
+      <button id="clearCookiesBtn" class="btn-secondary">Clear Cookies</button>
+      <button id="saveSettingsBtn" class="btn-primary">Save Settings</button>
+    </div>
+  </div>
+</div>
+
+<!-- VIRAL SHARE PROMPT MODAL -->
+<div class="modal-overlay" id="viralShareModal" role="dialog" aria-modal="true" aria-labelledby="viralShareTitle">
+  <div class="quality-modal" style="max-width: 420px; text-align: center; padding: 40px 24px;">
+    <button class="modal-close" id="viralShareClose" aria-label="Close" style="position: absolute; top: 16px; right: 16px;">✕</button>
+    <div style="font-size: 48px; margin-bottom: 16px;">💖</div>
+    <h3 id="viralShareTitle" class="modal-title" style="font-size: 1.5rem; margin-bottom: 12px;">Love using Tap2save?</h3>
+    <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 24px; line-height: 1.5;">
+      Help us keep it 100% free forever! Share Tap2save with your friends so they can download their favorite videos too.
+    </p>
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+      <button id="btnShareApp" class="btn-primary" style="width: 100%; justify-content: center;">
+        📤 Share with Friends
+      </button>
+      <button id="btnNotNow" style="background: transparent; border: none; color: var(--text-muted); padding: 8px; font-family: 'Inter', sans-serif; cursor: pointer;">
+        Maybe later
+      </button>
+    </div>
+  </div>
+</div>
+
+  <script src="app.js?v=7"></script>
+</body>
+</html>
