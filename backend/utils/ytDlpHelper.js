@@ -15,6 +15,8 @@ const SUPPORTED_DOMAINS = [
   "tiktok.com",
   "twitter.com",
   "x.com",
+  "pinterest.com",
+  "pin.it"
 ];
 
 /**
@@ -49,6 +51,7 @@ function detectPlatform(url) {
   if (u.includes("facebook.com") || u.includes("fb.watch")) return "Facebook";
   if (u.includes("tiktok.com")) return "TikTok";
   if (u.includes("twitter.com") || u.includes("x.com")) return "Twitter/X";
+  if (u.includes("pinterest.com") || u.includes("pin.it")) return "Pinterest";
   return "Unknown";
 }
 
