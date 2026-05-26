@@ -4,6 +4,7 @@ const { spawn } = require("child_process");
 const fs = require("fs");
 const path = require("path");
 const ffmpegPath = require("ffmpeg-static");
+try { fs.chmodSync(ffmpegPath, 0o755); } catch(e) {}
 const ytDlpPath = path.join(__dirname, "..", "yt-dlp");
 const { getVideoInfo, getDownloadUrl } = require("../utils/ytDlpHelper");
 const { getCookiesArgs } = require("../utils/configHelper");
@@ -63,6 +64,14 @@ router.get("/download", (req, res) => {
   const safeFormatId = formatId.replace(/[^a-zA-Z0-9_+\-/]/g, "");
   const safeFilename = (filename || "video").replace(/[^a-z0-9_\-. ]/gi, "_").substring(0, 200);
 
+  function sanitizeTime(t) {
+    if (!t) return null;
+    const parts = t.split(':');
+    return parts.map(p => p.padStart(2, '0')).join(':');
+  }
+  const safeStart = sanitizeTime(start);
+  const safeEnd = sanitizeTime(end);
+
   const isAudio = safeFormatId.includes("bestaudio") || safeFormatId === "mp3";
   const ext = isAudio ? "mp3" : "mp4";
   const downloadName = safeFilename.endsWith("." + ext) ? safeFilename : `${safeFilename}.${ext}`;
@@ -70,8 +79,8 @@ router.get("/download", (req, res) => {
   console.log(`[download] Starting: format=${safeFormatId} file="${downloadName}" trimmer=${start}-${end}`);
   const baseArgs = getCookiesArgs();
   
-  if (start && end) {
-    baseArgs.push("--download-sections", `*${start}-${end}`);
+  if (safeStart && safeEnd) {
+    baseArgs.push("--download-sections", `*${safeStart}-${safeEnd}`);
   }
 
   function emitProgress(dataStr) {
@@ -115,7 +124,9 @@ router.get("/download", (req, res) => {
   const tempFileName = `temp_${uniqueId}.mp4`;
   const tempFilePath = path.join(TMP_DIR, tempFileName);
 
-  const args = [...baseArgs, "--ffmpeg-location", ffmpegPath, "-f", `${safeFormatId}+bestaudio/best`, "--merge-output-format", "mp4", "-o", path.join(TMP_DIR, `temp_${uniqueId}.%(ext)s`), url];
+  // Merge video format with best audio format, falling back to the selected format itself if bestaudio is unavailable (e.g. format already has audio).
+  // Use --merge-output-format mp4 to ensure the final output is mp4.
+  const args = [...baseArgs, "--ffmpeg-location", ffmpegPath, "-f", `${safeFormatId}+bestaudio/${safeFormatId}`, "--merge-output-format", "mp4", "-o", path.join(TMP_DIR, `temp_${uniqueId}.%(ext)s`), url];
   
   const ytDlp = spawn(ytDlpPath, args);
 
@@ -133,7 +144,7 @@ router.get("/download", (req, res) => {
     let actualFile = null;
     if (fs.existsSync(TMP_DIR)) {
       const files = fs.readdirSync(TMP_DIR);
-      actualFile = files.find(f => f.startsWith(`temp_${uniqueId}.`));
+      actualFile = files.find(f => f.match(new RegExp(`^temp_${uniqueId}\\.[a-z0-9]+$`)));
     }
 
     if (code === 0 && actualFile) {
@@ -197,8 +208,11 @@ router.get("/proxy-image", async (req, res) => {
   try {
     const proxyRes = await fetch(imageUrl, {
       headers: {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
-        "Accept": "image/*,*/*;q=0.8"
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.9",
+        "Referer": "https://www.instagram.com/",
+        "Origin": "https://www.instagram.com"
       },
       redirect: "follow"
     });

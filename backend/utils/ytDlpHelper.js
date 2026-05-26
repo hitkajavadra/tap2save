@@ -91,18 +91,78 @@ async function getVideoInfo(url) {
       const info = JSON.parse(line);
 
       // Extract available video formats (filter useful ones)
-      const formats = (info.formats || [])
-        .filter((f) => f.vcodec !== "none" || f.acodec !== "none")
-        .map((f) => ({
-          format_id: f.format_id,
-          ext: f.ext,
-          quality: f.format_note || f.height ? `${f.height}p` : "audio",
-          resolution: f.resolution || "audio only",
-          filesize: f.filesize || f.filesize_approx || null,
-          hasVideo: f.vcodec !== "none",
-          hasAudio: f.acodec !== "none",
-          fps: f.fps || null,
-        }))
+      let rawFormats = (info.formats || []).filter((f) => {
+        if (f.vcodec === "none" || f.acodec === "none") return false;
+        if (f.ext !== "mp4") return false;
+        if (f.protocol && !f.protocol.startsWith("http")) return false;
+        if (f.vcodec && !(f.vcodec.includes("avc") || f.vcodec.includes("h264"))) return false;
+        return true;
+      });
+      
+      // Sort to prefer H.264 (avc1) over HEVC (hvc1/hev1) or VP9 so that deduplication keeps the most compatible codec
+      rawFormats.sort((a, b) => {
+        const aIsH264 = a.vcodec && (a.vcodec.includes("avc1") || a.vcodec.includes("h264"));
+        const bIsH264 = b.vcodec && (b.vcodec.includes("avc1") || b.vcodec.includes("h264"));
+        if (aIsH264 && !bIsH264) return -1;
+        if (!aIsH264 && bIsH264) return 1;
+        // Keep original yt-dlp quality sorting (higher bitrate/quality at the end)
+        return (b.tbr || 0) - (a.tbr || 0); 
+      });
+
+      const formats = rawFormats
+        .map((f) => {
+          let qualityLabel = "audio";
+          let w = f.width;
+          let h = f.height;
+          if ((!w || !h) && f.resolution && f.resolution.includes('x')) {
+            const parts = f.resolution.split('x');
+            const pw = parseInt(parts[0], 10);
+            const ph = parseInt(parts[1], 10);
+            if (!isNaN(pw) && !isNaN(ph)) {
+              w = pw;
+              h = ph;
+            }
+          }
+
+          if (w && h) {
+            let minDim = Math.min(w, h);
+            const standards = [144, 240, 360, 480, 720, 1080, 1440, 2160];
+            let snapped = minDim;
+            let minDiff = Infinity;
+            for (const std of standards) {
+              const diff = Math.abs(minDim - std);
+              if (diff < minDiff) {
+                minDiff = diff;
+                snapped = std;
+              }
+            }
+            if (minDiff / snapped < 0.3) {
+              qualityLabel = `${snapped}p`;
+            } else {
+              qualityLabel = `${minDim}p`;
+            }
+          } else if (f.format_note && f.format_note.match(/^\d+p$/)) {
+            qualityLabel = f.format_note;
+          } else if (h) {
+            if (h >= 1700 && h <= 2000) qualityLabel = "1080p";
+            else if (h >= 1100 && h <= 1400) qualityLabel = "720p";
+            else qualityLabel = `${h}p`;
+          } else if (w) {
+            qualityLabel = `${w}p`;
+          } else if (f.format_note) {
+            qualityLabel = f.format_note;
+          }
+          return {
+            format_id: f.format_id,
+            ext: f.ext,
+            quality: qualityLabel,
+            resolution: f.resolution || "audio only",
+            filesize: f.filesize || f.filesize_approx || null,
+            hasVideo: f.vcodec !== "none",
+            hasAudio: f.acodec !== "none",
+            fps: f.fps || null,
+          };
+        })
         .filter(
           (f, idx, arr) =>
             // Deduplicate by quality label

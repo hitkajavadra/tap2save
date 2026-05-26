@@ -9,6 +9,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // ─── Security Middleware ────────────────────────────────────────────────────
+app.set("trust proxy", true);
 app.use(helmet());
 
 // CORS: Allow your frontend origin
@@ -28,7 +29,7 @@ app.use(
 // Rate Limiting: 60 requests per IP per 15 minutes
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 60,
+  max: 500,
   standardHeaders: true,
   legacyHeaders: false,
   message: {
